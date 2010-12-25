@@ -33,22 +33,22 @@ void Win32Handler::msgbox(string msg, int value)
 	}
 }
 
-int* Win32Handler::getrgb(int x, int y)
+Pixel Win32Handler::getrgb(int x, int y)
 {
 	int col = GetPixel(hDC, 100, 100);
+	Pixel p;
 
 	if (col == CLR_INVALID)
 	{
 		msgbox("colour invalid");
-		return NULL;
+		return p;
 	}
 
-	int *rgb = new int[3];
-	rgb[0] = GetRValue(col);
-	rgb[1] = GetGValue(col);
-	rgb[2] = GetBValue(col);
+	p.red = GetRValue(col);
+	p.green = GetGValue(col);
+	p.blue = GetBValue(col);
 
-	return rgb;
+	return p;
 }
 
 void Win32Handler::movecursor(int x, int y)

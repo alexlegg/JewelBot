@@ -15,7 +15,7 @@ public:
 	//void deinit();
 
 	void msgbox(std::string msg, int value = 0);
-	int *getrgb(int x, int y);
+	Pixel getrgb(int x, int y);
 	void movecursor(int x, int y);
 	void click(int x, int y);
 };
