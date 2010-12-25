@@ -1,5 +1,6 @@
 #include "OSHandler.h"
 
+//Fucking C++! Why the fuck can't this go in the fucking header fucking file?!?!
 const int OSHandler::gemcolours[] =
 {	16711422,	//Silver
 	8650884,	//Purple
