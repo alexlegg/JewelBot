@@ -13,6 +13,7 @@ int main(int argc, char **argv)
 
 	//Play now button (for me)
 	os->movecursor(600, 620);
+	os->click(600, 620);
 
 	delete os;
 	return 0;
