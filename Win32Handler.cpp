@@ -36,15 +36,8 @@ void Win32Handler::msgbox(string msg, int value)
 
 int Win32Handler::getgem(int x, int y)
 {
-	int col = GetPixel(hDC, x, y);
-
-	if (col == CLR_INVALID)
-	{
-		msgbox("colour invalid");
-		return -1;
-	}
-
-	//int r = GetRValue(col); //Might need this at some point?
+	int col = getcolour(x, y);
+	if (col == -1) return -1;
 	
 	int c = 0;
 	int mindiff = abs(col - gemcolours[0]);
@@ -57,13 +50,24 @@ int Win32Handler::getgem(int x, int y)
 		}
 	}
 
-	//cout << c << "\t" << mindiff << endl;
-	if (mindiff > 100) //Yay magic!
+	if (mindiff > 100) //Yay magic numbers!
 	{
 		return -1;
 	} else {
 		return c;
 	}
+}
+
+int Win32Handler::getcolour(int x, int y)
+{
+	int col = GetPixel(hDC, x, y);
+
+	if (col == CLR_INVALID)
+	{
+		msgbox("colour invalid");
+		return -1;
+	}
+	return col;
 }
 
 void Win32Handler::movecursor(int x, int y)
@@ -75,4 +79,9 @@ void Win32Handler::click(int x, int y)
 {
 	mouse_event(MOUSEEVENTF_LEFTDOWN, x, y, 0, 0);
 	mouse_event(MOUSEEVENTF_LEFTUP, x, y, 0, 0);
+}
+
+void Win32Handler::wait(int ms)
+{
+	Sleep(ms);
 }

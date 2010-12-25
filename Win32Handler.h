@@ -16,8 +16,10 @@ public:
 
 	void msgbox(std::string msg, int value = 0);
 	int getgem(int x, int y);
+	int getcolour(int x, int y);
 	void movecursor(int x, int y);
 	void click(int x, int y);
+	void wait(int ms);
 };
 
 #endif

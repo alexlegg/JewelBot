@@ -1,5 +1,6 @@
 #include "OSHandler.h"
 #include "Win32Handler.h"
+#include "Game.h"
 #include <iostream>
 
 using namespace std;
@@ -14,10 +15,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	//Play now button (for me)
-	//os->click(600, 620);
-
-	Sleep(100);
+	Game game(os, 545, 340, 40);
 
 	int base_x = 545;
 	int base_y = 340;

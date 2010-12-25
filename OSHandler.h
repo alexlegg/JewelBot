@@ -16,8 +16,10 @@ public:
 
 	virtual void msgbox(std::string msg, int value = 0) = 0;
 	virtual int getgem(int x, int y) = 0;
+	virtual int getcolour(int x, int y) = 0;
 	virtual void movecursor(int x, int y) = 0;
 	virtual void click(int x, int y) = 0;
+	virtual void wait(int ms) = 0;
 };
 
 #endif
