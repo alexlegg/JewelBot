@@ -13,6 +13,7 @@ class Game
 
 	void readboard();
 	void printboard();
+	int checkrow(int row[], int length);
 
 public:
 	Game(OSHandler* oshandler, int bx, int by, int off);

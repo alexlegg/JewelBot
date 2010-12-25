@@ -54,6 +54,34 @@ void Game::play()
 	readboard();
 
 	printboard();
+	cout << endl;
+
+	//Find a move
+	for (int x = 0; x != 8; ++x)
+	{
+		for (int y = 1; y != 8; ++ y)
+		{
+			//Swap up
+			int start = x-3;
+			int end = x+3;
+			if (start < 0) start = 0;
+			if (end > 7) end = 7;
+			int row[2][6];
+			for (int i = start; i != end; ++i)
+			{
+				row[0][i] = board[y][i];
+				row[1][i] = board[y-1][i];
+				cout << row[0][i] << " ";
+			}
+			cout << endl;
+
+			int score = 0;
+			score += checkrow(row[0], end-start);
+			score += checkrow(row[1], end-start);
+			//cout << "(" << x << ", " << y << ") = " << score << endl;
+			//cout << start << ", " << end << endl;
+		}
+	}
 
 }
 
@@ -80,4 +108,22 @@ void Game::printboard()
 		}
 		cout << endl;
 	}
+}
+
+int Game::checkrow(int row[], int length)
+{
+	int count = 0;
+	int max = 0;
+	int prev = -1;
+	for (int i = 0; i != length; ++i)
+	{
+		if (row[i] == prev)
+		{
+			count++;
+		} else {
+			max = count;
+			count = 0;
+		}
+	}
+	return max;
 }
