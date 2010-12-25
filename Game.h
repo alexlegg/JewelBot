@@ -11,10 +11,13 @@ class Game
 	int base_x, base_y, offset;
 	OSHandler* os;
 
+	void readboard();
+	void printboard();
+
 public:
 	Game(OSHandler* oshandler, int bx, int by, int off);
 
-	void readboard();
+	void play();
 };
 
 #endif

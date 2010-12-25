@@ -20,8 +20,7 @@ Game::Game(OSHandler* oshandler, int bx, int by, int off)
 
 	//Delicious magic numbers! (Fuck you, don't judge me)
 	int playbutton = os->getcolour(bx + 55, by + 280);
-	cout << bx + 55 << ", " << by + 280 << endl;
-	cout << playbutton << endl;
+	
 	if (abs(playbutton - 11438276) < 100)
 	{
 		//Ready state
@@ -34,4 +33,51 @@ Game::Game(OSHandler* oshandler, int bx, int by, int off)
 
 	time = 0;
 	//os->sleep(100);
+}
+
+void Game::play()
+{
+	//Not in ready state - can't play
+	if (state != 0) return;
+
+	cout << "test" << endl;
+	//Click play button and wait a bit
+	os->wait(500);
+	//os->movecursor(base_x + 55, base_y + 280);
+	os->click(base_x + 55, base_y + 280);
+	os->wait(4000);
+
+	//Get the cursor out the way (not sure if needed)
+	os->movecursor(0, 0);
+
+	//Get the current board
+	readboard();
+
+	printboard();
+
+}
+
+void Game::readboard()
+{
+	for (int x = 0; x != 8; ++x)
+	{
+		for (int y = 0; y != 8; ++y)
+		{
+			//os->movecursor(base_x + (x * offset), base_y + (y * offset));
+			board[x][y] = os->getgem(base_x + (y * offset), base_y + (x * offset));
+			//os->wait(50);
+		}
+	}
+}
+
+void Game::printboard()
+{
+	for (int x = 0; x != 8; ++x)
+	{
+		for (int y = 0; y != 8; ++y)
+		{
+			cout << board[x][y] << " ";
+		}
+		cout << endl;
+	}
 }

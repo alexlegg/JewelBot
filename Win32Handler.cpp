@@ -16,7 +16,7 @@ bool Win32Handler::init(const char* windowname)
 		return false;
 	} else {
 		SetForegroundWindow(gamewindow);
-		Sleep(20); //Let windows catch up a bit
+		wait(50); //Let windows catch up a bit
 		return true;
 	}
 }
@@ -77,8 +77,9 @@ void Win32Handler::movecursor(int x, int y)
 
 void Win32Handler::click(int x, int y)
 {
-	mouse_event(MOUSEEVENTF_LEFTDOWN, x, y, 0, 0);
-	mouse_event(MOUSEEVENTF_LEFTUP, x, y, 0, 0);
+	movecursor(x, y);
+	mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+	mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
 }
 
 void Win32Handler::wait(int ms)

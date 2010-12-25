@@ -17,15 +17,7 @@ int main(int argc, char **argv)
 
 	Game game(os, 545, 340, 40);
 
-	int base_x = 545;
-	int base_y = 340;
-	for (int x = 0; x != 8; ++x)
-	{
-		//os->movecursor(base_x + (x*40), base_y);
-		int g = os->getgem(base_x + (x*40), base_y);
-		cout << g << endl;
-		Sleep(100);
-	}
+	game.play();
 	
 	os->msgbox("Read dem values!");
 
