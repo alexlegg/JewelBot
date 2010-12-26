@@ -13,7 +13,7 @@ class Game
 
 	void readboard();
 	void printboard();
-	int checkrow(int row[], int length);
+	int checkstrip(int strip[], int length);
 
 	//Could probably combine these, but it gets confusing so whatever
 	int getrow(int x, int y, int dir, int row[]);

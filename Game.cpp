@@ -73,18 +73,18 @@ void Game::play()
 			row2len = getrow(x, y, -1, row2);
 			col1len = getcol(x, y, 0, col1);
 
-			scoreup += checkrow(row1, row1len);
-			scoreup += checkrow(row2, row2len);
-			scoreup += checkrow(col1, col1len);
+			scoreup += checkstrip(row1, row1len);
+			scoreup += checkstrip(row2, row2len);
+			scoreup += checkstrip(col1, col1len);
 			
 			//Swap horizontal (always left)
 			row1len = getrow(x, y, 0, col1);
 			col1len = getcol(x-1, y, 1, col1);
 			col2len = getcol(x, y, -1, col2);
 
-			scoredown += checkrow(row1, row1len);
-			scoredown += checkrow(col1, col1len);
-			scoredown += checkrow(col2, col2len);
+			scoredown += checkstrip(row1, row1len);
+			scoredown += checkstrip(col1, col1len);
+			scoredown += checkstrip(col2, col2len);
 
 			//Update max score
 			if (scoreup > maxscore || scoredown > maxscore)
@@ -97,6 +97,7 @@ void Game::play()
 		}
 	}
 
+	//Print it out for shits n giggles
 	if (moveup)
 	{
 		cout << "Best move: (" << movex << ", " << movey << ", ^) = " << maxscore;
@@ -120,9 +121,7 @@ void Game::readboard()
 	{
 		for (int y = 0; y != 8; ++y)
 		{
-			//os->movecursor(base_x + (x * offset), base_y + (y * offset));
 			board[x][y] = os->getgem(base_x + (y * offset), base_y + (x * offset));
-			//os->wait(50);
 		}
 	}
 }
@@ -140,21 +139,21 @@ void Game::printboard()
 }
 
 //Check a strip of the board for any matching sequences
-int Game::checkrow(int row[], int length)
+int Game::checkstrip(int strip[], int length)
 {
 	int count = 1;
 	int max = 0;
 	int prev = -1;
 	for (int i = 0; i != length; ++i)
 	{
-		if (row[i] == prev)
+		if (strip[i] == prev)
 		{
 			count++;
 		} else {
 			if (count > max) max = count;
 			count = 1;
 		}
-		prev = row[i];
+		prev = strip[i];
 	}
 	if (count > max) max = count;
 	if (max < 3) max = 0;
