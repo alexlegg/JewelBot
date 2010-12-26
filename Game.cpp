@@ -84,6 +84,12 @@ void Game::play()
 				row1len = getrow(x, y, 0, row1);
 				col1len = getcol(x-1, y, 1, col1);
 				col2len = getcol(x, y, -1, col2);
+				
+				/*for (int i = 0; i != row1len; ++i)
+				{
+					cout << row1[i] << " ";
+				}
+				cout << endl;*/
 
 				scoredown += checkstrip(row1, row1len);
 				scoredown += checkstrip(col1, col1len);
@@ -110,25 +116,26 @@ void Game::play()
 		cout << endl;
 
 		//Make the move
-		os->click(base_x + (movex * offset), base_y + (movey * offset));
-		if (moveup)
+		if (maxscore > 0)
 		{
-			os->click(base_x + (movex * offset), base_y + ((movey-1) * offset));
-		} else {
-			os->click(base_x + ((movex-1) * offset), base_y + (movey * offset));
+			os->click(base_x + (movex * offset), base_y + (movey * offset));
+			if (moveup)
+			{
+				os->click(base_x + (movex * offset), base_y + ((movey-1) * offset));
+			} else {
+				os->click(base_x + ((movex-1) * offset), base_y + (movey * offset));
+			}
 		}
 
 		//Wait for swap to finish
 		os->wait(500);
-
-		//See if the game's over
-		/*int playbutton = os->getcolour(base_x + 55, base_y + 280);
-		if (abs(playbutton - 11438276) < 100)
-		{
-			break;
-		}*/
 	}
 }
+
+//void Game::makemove(int x, int y)
+//{
+//
+//}
 
 void Game::readboard()
 {
@@ -161,8 +168,12 @@ int Game::checkstrip(int strip[], int length)
 	int prev = -1;
 	for (int i = 0; i != length; ++i)
 	{
-		if (strip[i] == prev)
+		if (strip[i] == -1)
 		{
+			count = 1;
+			prev = -1;
+			continue;
+		} else if (strip[i] == prev) {
 			count++;
 		} else {
 			if (count > max) max = count;
@@ -182,6 +193,7 @@ int Game::checkstrip(int strip[], int length)
 int Game::getrow(int x, int y, int dir, int row[])
 {
 	if (y+dir <= 0) return 0;
+	if (dir == 0 && x == 0) return 0;
 	int start = (dir==0) ? x-3 : x-2;
 	int end = x+3;
 	if (start < 0) start = 0;
@@ -195,28 +207,41 @@ int Game::getrow(int x, int y, int dir, int row[])
 			row[i-start] = board[y][i];
 		}
 	}
+	if (dir == 0)
+	{
+		int temp = row[x-start];
+		row[x-start] = row[x-start-1];
+		row[x-start-1] = temp;
+	}
 	return end-start;
 }
 
 //Get a column of the board - without overflowing off edges
-//dir = -1 for up, dir = 1 for down, dir = 0 for left
+//dir = -1 for left, dir = 1 for right, dir = 0 for up
 //Yes I realise that doesn't make any sense - fuck you
 //Return value is length, and modifies col
 int Game::getcol(int x, int y, int dir, int col[])
 {
 	if (x+dir <= 0) return 0;
+	if (dir == 0 && y == 0) return 0;
 	int start = (dir==0) ? y-3 : y-2;
 	int end = y+3;
 	if (start < 0) start = 0;
 	if (end > 8) end = 8;
 	for (int i = start; i != end; ++i)
 	{
-		if (i == x)
+		if (i == y)
 		{
 			col[i-start] = board[i][x+dir];
 		} else {
-			col[i-start] = board[i][x+dir];
+			col[i-start] = board[i][x];
 		}
+	}
+	if (dir == 0)
+	{
+		int temp = col[y-start];
+		col[y-start] = col[y-start-1];
+		col[y-start-1] = temp;
 	}
 	return end-start;
 }
