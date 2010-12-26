@@ -14,6 +14,7 @@ class Game
 	void readboard();
 	void printboard();
 	int checkrow(int row[], int length);
+	int getrow(int x, int y, int dir, int row[]);
 
 public:
 	Game(OSHandler* oshandler, int bx, int by, int off);

@@ -59,32 +59,18 @@ void Game::play()
 	//Find a move
 	for (int x = 0; x != 8; ++x)
 	{
-		for (int y = 1; y != 8; ++ y)
+		for (int y = 0; y != 8; ++ y)
 		{
-			//Swap up
-			int start = x-3;
-			int end = x+3;
-			if (start < 0) start = 0;
-			if (end > 7) end = 7;
-			int row[2][6];
-			for (int i = start; i != end; ++i)
-			{
-				if (i == x)
-				{
-					row[0][i-start] = board[y-1][i];
-					row[1][i-start] = board[y][i];
-				} else {
-					row[0][i-start] = board[y][i];
-					row[1][i-start] = board[y-1][i];
-				}
-				//cout << row[0][i-start] << " ";
-			}
-			//cout << endl;
+			//Swap vertical (always up, no need to check down swaps)
+			int row1[6];
+			int row2[6];
+			int row1len = getrow(x, y-1, 1, row1);
+			int row2len = getrow(x, y, -1, row2);
 
 			int score = 0;
-			score += checkrow(row[0], end-start);
-			score += checkrow(row[1], end-start);
-			//cout << "(" << x << ", " << y << ") = " << score << endl;
+			score += checkrow(row1, row1len);
+			score += checkrow(row2, row2len);
+			cout << "(" << x << ", " << y << ") = " << score << endl;
 			//cout << start << ", " << end << endl;
 		}
 	}
@@ -115,15 +101,14 @@ void Game::printboard()
 	}
 }
 
+//Check a strip of the board for any matching sequences
 int Game::checkrow(int row[], int length)
 {
-	//cout << "hello? " << length << endl;
 	int count = 1;
 	int max = 0;
 	int prev = -1;
 	for (int i = 0; i != length; ++i)
 	{
-		//cout << row[i] << " ";
 		if (row[i] == prev)
 		{
 			count++;
@@ -133,8 +118,30 @@ int Game::checkrow(int row[], int length)
 		}
 		prev = row[i];
 	}
-	//cout << endl;
 	if (count > max) max = count;
-	cout << max << endl;
+	if (max < 3) max = 0;
 	return max;
+}
+
+//Get a strip of the board - without overflowing off edges
+//dir = -1 for up, dir = 1 for down
+//Return value is length, and modifies row
+int Game::getrow(int x, int y, int dir, int row[])
+{
+	if (y+dir < 0) return 0;
+	int start = x-3;
+	int end = x+3;
+	if (start < 0) start = 0;
+	if (end > 7) end = 7;
+	for (int i = start; i != end; ++i)
+	{
+		if (i == x)
+		{
+			row[i-start] = board[y+dir][i];
+		} else {
+			row[i-start] = board[y][i];
+		}
+	}
+	
+	return end-start;
 }
