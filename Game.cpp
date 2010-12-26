@@ -43,75 +43,90 @@ void Game::play()
 	//Click play button and wait a bit
 	os->wait(500);
 	os->click(base_x + 55, base_y + 280);
-	os->wait(4000);
+	os->wait(3500);
 
-	//Get the cursor out the way (not sure if needed)
-	os->movecursor(0, 0);
-
-	//Get the current board
-	readboard();
-
-	printboard();
-	cout << endl;
-
-	//Find a move
-	int movex, movey;
-	bool moveup;
-	int maxscore = 0;
-	for (int x = 0; x != 8; ++x)
+	int time = os->gettime();
+	while (time - os->gettime() < 75)
 	{
-		for (int y = 0; y != 8; ++ y)
+		//Get the cursor out the way (not sure if needed)
+		os->movecursor(0, 0);
+
+		//Get the current board
+		readboard();
+
+		printboard();
+		cout << endl;
+
+		//Find a move
+		int movex, movey;
+		bool moveup;
+		int maxscore = 0;
+		for (int x = 0; x != 8; ++x)
 		{
-			int row1[6], row1len;
-			int row2[6], row2len;
-			int col1[6], col1len;
-			int col2[6], col2len;
-			int scoreup = 0, scoredown = 0;
-
-			//Swap vertical (always up, no need to check down swaps)
-			row1len = getrow(x, y-1, 1, row1);
-			row2len = getrow(x, y, -1, row2);
-			col1len = getcol(x, y, 0, col1);
-
-			scoreup += checkstrip(row1, row1len);
-			scoreup += checkstrip(row2, row2len);
-			scoreup += checkstrip(col1, col1len);
-			
-			//Swap horizontal (always left)
-			row1len = getrow(x, y, 0, col1);
-			col1len = getcol(x-1, y, 1, col1);
-			col2len = getcol(x, y, -1, col2);
-
-			scoredown += checkstrip(row1, row1len);
-			scoredown += checkstrip(col1, col1len);
-			scoredown += checkstrip(col2, col2len);
-
-			//Update max score
-			if (scoreup > maxscore || scoredown > maxscore)
+			for (int y = 0; y != 8; ++ y)
 			{
-				movex = x;
-				movey = y;
-				moveup = (scoreup > scoredown);
-				maxscore = (moveup) ? scoreup : scoredown;
+				int row1[6], row1len;
+				int row2[6], row2len;
+				int col1[6], col1len;
+				int col2[6], col2len;
+				int scoreup = 0, scoredown = 0;
+
+				//Swap vertical (always up, no need to check down swaps)
+				row1len = getrow(x, y-1, 1, row1);
+				row2len = getrow(x, y, -1, row2);
+				col1len = getcol(x, y, 0, col1);
+
+				scoreup += checkstrip(row1, row1len);
+				scoreup += checkstrip(row2, row2len);
+				scoreup += checkstrip(col1, col1len);
+			
+				//Swap horizontal (always left)
+				row1len = getrow(x, y, 0, row1);
+				col1len = getcol(x-1, y, 1, col1);
+				col2len = getcol(x, y, -1, col2);
+
+				scoredown += checkstrip(row1, row1len);
+				scoredown += checkstrip(col1, col1len);
+				scoredown += checkstrip(col2, col2len);
+
+				//Update max score
+				if (scoreup > maxscore || scoredown > maxscore)
+				{
+					movex = x;
+					movey = y;
+					moveup = (scoreup > scoredown);
+					maxscore = (moveup) ? scoreup : scoredown;
+				}
 			}
 		}
-	}
 
-	//Print it out for shits n giggles
-	if (moveup)
-	{
-		cout << "Best move: (" << movex << ", " << movey << ", ^) = " << maxscore;
-	} else {
-		cout << "Best move: (" << movex << ", " << movey << ", <) = " << maxscore;
-	}
+		//Print it out for shits n giggles
+		if (moveup)
+		{
+			cout << "Best move: (" << movex << ", " << movey << ", ^) = " << maxscore;
+		} else {
+			cout << "Best move: (" << movex << ", " << movey << ", <) = " << maxscore;
+		}
+		cout << endl;
 
-	//Make the move
-	os->click(base_x + (movex * offset), base_y + (movey * offset));
-	if (moveup)
-	{
-		os->click(base_x + (movex * offset), base_y + ((movey-1) * offset));
-	} else {
-		os->click(base_x + ((movex-1) * offset), base_y + (movey * offset));
+		//Make the move
+		os->click(base_x + (movex * offset), base_y + (movey * offset));
+		if (moveup)
+		{
+			os->click(base_x + (movex * offset), base_y + ((movey-1) * offset));
+		} else {
+			os->click(base_x + ((movex-1) * offset), base_y + (movey * offset));
+		}
+
+		//Wait for swap to finish
+		os->wait(500);
+
+		//See if the game's over
+		/*int playbutton = os->getcolour(base_x + 55, base_y + 280);
+		if (abs(playbutton - 11438276) < 100)
+		{
+			break;
+		}*/
 	}
 }
 

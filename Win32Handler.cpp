@@ -86,3 +86,10 @@ void Win32Handler::wait(int ms)
 {
 	Sleep(ms);
 }
+
+int Win32Handler::gettime()
+{
+	SYSTEMTIME st;
+	GetSystemTime(&st);
+    return st.wSecond;
+}

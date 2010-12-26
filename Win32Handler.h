@@ -20,6 +20,7 @@ public:
 	void movecursor(int x, int y);
 	void click(int x, int y);
 	void wait(int ms);
+	int gettime();
 };
 
 #endif

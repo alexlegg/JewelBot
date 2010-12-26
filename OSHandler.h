@@ -20,6 +20,7 @@ public:
 	virtual void movecursor(int x, int y) = 0;
 	virtual void click(int x, int y) = 0;
 	virtual void wait(int ms) = 0;
+	virtual int gettime() = 0;
 };
 
 #endif
