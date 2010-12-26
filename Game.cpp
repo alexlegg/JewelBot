@@ -69,11 +69,17 @@ void Game::play()
 			int row[2][6];
 			for (int i = start; i != end; ++i)
 			{
-				row[0][i] = board[y][i];
-				row[1][i] = board[y-1][i];
-				cout << row[0][i] << " ";
+				if (i == x)
+				{
+					row[0][i-start] = board[y-1][i];
+					row[1][i-start] = board[y][i];
+				} else {
+					row[0][i-start] = board[y][i];
+					row[1][i-start] = board[y-1][i];
+				}
+				//cout << row[0][i-start] << " ";
 			}
-			cout << endl;
+			//cout << endl;
 
 			int score = 0;
 			score += checkrow(row[0], end-start);
@@ -82,7 +88,6 @@ void Game::play()
 			//cout << start << ", " << end << endl;
 		}
 	}
-
 }
 
 void Game::readboard()
@@ -112,18 +117,24 @@ void Game::printboard()
 
 int Game::checkrow(int row[], int length)
 {
-	int count = 0;
+	//cout << "hello? " << length << endl;
+	int count = 1;
 	int max = 0;
 	int prev = -1;
 	for (int i = 0; i != length; ++i)
 	{
+		//cout << row[i] << " ";
 		if (row[i] == prev)
 		{
 			count++;
 		} else {
-			max = count;
-			count = 0;
+			if (count > max) max = count;
+			count = 1;
 		}
+		prev = row[i];
 	}
+	//cout << endl;
+	if (count > max) max = count;
+	cout << max << endl;
 	return max;
 }
